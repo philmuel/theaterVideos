@@ -38,7 +38,10 @@ def addStaticImg(out,imPath,secs=2):
 
 
 # open out video files and add initial black padding
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
+if cv2.__version__[:3]=='2.4':
+    fourcc = cv2.cv.CV_FOURCC(*'XVID')
+else:
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
 videoWriters = {}
 for raspi_id in raspi_ids:
     out_path = outDir+'raspi'+str(raspi_id)+'.avi'
