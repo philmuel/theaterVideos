@@ -5,10 +5,12 @@ import pdb
 fps = 30.0
 raspi_ids = range(2)
 
+dataDir = '/Users/philipp/Documents/theater/push_up/tv_project/'
+dataDir = '/home/pmueller/pushup/'
 
-imgInDir = '/Users/philipp/Documents/theater/push_up/tv_project/images_raw/'
-videoInDir = '/Users/philipp/Documents/theater/push_up/tv_project/videos_raw/'
-outDir = '/Users/philipp/Documents/theater/push_up/tv_project/videos_out/'
+imgInDir = dataDir+'images_raw/'
+videoInDir = dataDir+'videos_raw/'
+outDir = dataDir+'videos_out/'
 
 out_width = 720
 out_height = 480
@@ -65,8 +67,20 @@ for raspi_id in raspi_ids:
     videoWriters[raspi_id] = out
 
 
-# to resize image with opencv:
-#resized_image = cv2.resize(image, (100, 50)) 
+
+# --------------------------------------------
+# VIDEOS FOR SCENE 2
+# --------------------------------------------
+for raspi_id in raspi_ids:
+    out = videoWriters[raspi_id]
+    videoPath = videoInDir+'2_'+str(raspi_id)+'.mp4'
+    # first, keep repeating light leak video for 5 minutes (fading in and out if video too short)
+
+
+    # then static noise for 10 minutes
+
+
+
 
 
 
