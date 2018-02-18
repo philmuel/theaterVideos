@@ -5,7 +5,7 @@ import pdb
 fps = 30.0
 raspi_ids = range(2)
 
-dataDir = '/Users/philipp/Documents/theater/push_up/tv_project/'
+#dataDir = '/Users/philipp/Documents/theater/push_up/tv_project/'
 dataDir = '/home/pmueller/pushup/'
 
 imgInDir = dataDir+'images_raw/'
@@ -21,16 +21,22 @@ def addBlackPadding(out,secs=2):
     for i in range(int(secs*fps)):
         out.write(blackFrame)
     return out
-   
-def addStaticImg(out,imPath,secs=2):
-    img = cv2.imread(imPath)
-    # resize image to dimensions of video
-#    img = np.swapaxes(img,0,1)
+  
+
+def resizeImage(img):
     size_multiplier = float(out_width)/img.shape[1]
     new_height = int(img.shape[0]*size_multiplier)
     img = cv2.resize(img,(out_width,new_height))
     lowerPadding = np.zeros((2*out_height-new_height,out_width,3),dtype='uint8')
     img = np.concatenate([img,lowerPadding],axis=0)
+    return img
+
+
+def addStaticImg(out,imPath,secs=2):
+    img = cv2.imread(imPath)
+    # resize image to dimensions of video
+#    img = np.swapaxes(img,0,1)
+    img = resizeImage(img)
     for i in range(int(secs*fps)):
         out.write(img)
     return out
@@ -60,7 +66,7 @@ for raspi_id in raspi_ids:
 for raspi_id in raspi_ids:
     # get video writer for raspi_id
     out = videoWriters[raspi_id]
-    # first add image forscene 1.4
+    # first add image for scene 1.4
     imPath = imgInDir+'14_'+str(raspi_id)+'.jpg'
     out = addStaticImg(out,imPath)
     # then for scene 1.6
@@ -74,14 +80,32 @@ for raspi_id in raspi_ids:
 # --------------------------------------------
 # VIDEOS FOR SCENE 2
 # --------------------------------------------
+fade_in_time = 3 # seconds of linear fade in
 for raspi_id in raspi_ids:
+    print('writing videos for scene 2, raspi = '+str(raspi_id))
     out = videoWriters[raspi_id]
-    videoPath = videoInDir+'2_'+str(raspi_id)+'.mp4'
+    videoPath = videoInDir+'s2_'+str(raspi_id)+'.mp4'
     # first, keep repeating light leak video for 5 minutes (fading in and out if video too short)
+    cap = cv2.VideoCapture(videoPath)
+    for i in range(int(5*60*fps)):
+        ret,frame = cap.read()
+        if i<fade_in_time*fps:
+            fade_in_multiplier = float(i)/(fade_in_time*fps)
+            frame = (frame*fade_in_multiplier).astype('uint8')
+        frame = resizeImage(frame)
+        out.write(frame)
+    # then noise for 10 minutes
+    for i in range(int(10*60*fps)):
+        frame = np.random.randint(0,255,(120,180,1)).astype('uint8')
+        frame = np.concatenate([frame]*3,axis=2)
+        frame = resizeImage(frame)
+        out.write(frame)
 
 
-    # then static noise for 10 minutes
 
+# --------------------------------------------
+# VIDEOS FOR SCENE 3
+# --------------------------------------------
 
 
 
