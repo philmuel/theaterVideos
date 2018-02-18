@@ -5,9 +5,19 @@ from pathlib import Path
 from time import sleep
 import logging
 logging.basicConfig(level=logging.INFO)
+import socket
 
 
-vidPath = "s2_warm01.mp4"
+HOST = ''
+PORT = 55555
+sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+sock.bind((HOST,PORT))
+sock.listen(1)
+
+conn,addr = sock.accept()
+
+
+vidPath = "raspi.avi"
 player_log = logging.getLogger("Player 1")
 
 player = OMXPlayer(vidPath, 
@@ -18,6 +28,16 @@ player.stopEvent += lambda _: player_log.info("Stop")
 
 player.set_aspect_mode('stretch')
 player.set_video_pos(0, 0, 2000, 1800)
+player.pause()
+
+while True:
+    data = conn.recv(1024)
+    pdb.set_trace()
+
+
+
+conn.close()
+player.quit()
 
 sleep(2.5)
 
@@ -29,4 +49,3 @@ player.set_position(5)
 
 sleep(5)
 
-player.quit()
