@@ -65,7 +65,7 @@ while True:
     if '_' in data:
         player.set_position(float(data.split('_')[1]))
         cmd = data.split('_')[0]
-        arg = float(data.split('_'[1]))
+        arg = float(data.split('_')[1])
         if cmd=='pause':
             player.set_position(arg)
             player.play()
