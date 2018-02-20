@@ -7,16 +7,23 @@ from time import sleep
 
 sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-sock.connect(('139.19.64.86',55555))
+sock.connect(('192.168.1.71',55555))
 
 
+print('sending pause_0')
 sock.sendall('pause_0')
-sleep(2)
+sleep(15)
 
-sock.sendall('pause_3')
-sleep(5)
+#sock.sendall('pause_3')
+#sleep(5)
 
-sock.sendall('play_5')
+cmd = 'play_'+str(60*10)
+print('sending '+cmd)
+sock.sendall(cmd)
 
+
+cmd = 'play_'+str(60*20)
+print('sending '+cmd)
+sock.sendall(cmd)
 
 sock.sendall('term')

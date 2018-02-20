@@ -9,13 +9,13 @@ import socket
 import pdb
 
 
-#HOST = ''
-#PORT = 55555
-#sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-#sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-#sock.bind((HOST,PORT))
-#sock.listen(1)
-#conn,addr = sock.accept()
+HOST = ''
+PORT = 55555
+sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.bind((HOST,PORT))
+sock.listen(1)
+conn,addr = sock.accept()
 
 
 vidPath = "raspi.avi"
@@ -31,45 +31,54 @@ player.stopEvent += lambda _: player_log.info("Stop")
 #player.set_video_pos(0, 0, 2000, 1800)
 sleep(3)
 #player.pause()
-player.set_position(2)
+player.set_position(0)
 player.play()
-sleep(2)
+sleep(10)
 player.pause()
-#player.play()
-#sleep(1)
-#player.pause()
-#player.pause()
-sleep(10)
-player.set_position(5)
-player.play()
-sleep(1)
-player.pause()
-sleep(10)
-player.set_position(8)
-player.play()
-sleep(10)
-player.set_position(600)
-sleep(10)
-player.stop()
 
 
-#while True:
-#    data = conn.recv(1024)
-#    print('received: '+str(data))
-#    if data=='term':
-#        break
-#    if '_' in data:
-#        player.set_position(float(data.split('_')[1]))
-#        cmd = data.split('_')[0]
-#        if cmd=='pause':
-#            player.pause()
-#        elif cmd=='play':
-#            player.play()
-#
-#    
-#
-#
-#conn.close()
+
+if False:
+    #player.play()
+    #sleep(1)
+    #player.pause()
+    #player.pause()
+    sleep(10)
+    player.set_position(5)
+    player.play()
+    sleep(1)
+    player.pause()
+    sleep(10)
+    player.set_position(8)
+    player.play()
+    sleep(10)
+    player.set_position(600)
+    sleep(10)
+    player.stop()
+
+
+while True:
+    data = conn.recv(1024)
+    print('received: '+str(data))
+    if data=='term':
+        break
+    if '_' in data:
+        player.set_position(float(data.split('_')[1]))
+        cmd = data.split('_')[0]
+        arg = float(data.split('_'[1])
+        if cmd=='pause':
+            player.set_position(arg)
+            player.play()
+            sleep(10)
+            player.pause()
+        elif cmd=='play':
+            player.set_position(arg)
+            player.play()
+
+    
+
+
+conn.close()
 player.quit()
 
 #sleep(2.5)
