@@ -29,7 +29,7 @@ player.stopEvent += lambda _: player_log.info("Stop")
 
 #player.set_aspect_mode('stretch')
 #player.set_video_pos(0, 0, 2000, 1800)
-sleep(3)
+sleep(10)
 #player.pause()
 player.set_position(0)
 player.play()
