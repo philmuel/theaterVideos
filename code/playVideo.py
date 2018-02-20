@@ -9,13 +9,16 @@ import socket
 import pdb
 
 
-HOST = ''
-PORT = 55555
-sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-sock.bind((HOST,PORT))
-sock.listen(1)
-conn,addr = sock.accept()
+noCommMode = True
+
+if not noCommMode:
+    HOST = ''
+    PORT = 55555
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((HOST,PORT))
+    sock.listen(1)
+    conn,addr = sock.accept()
 
 
 vidPath = "raspi.avi"
@@ -38,7 +41,7 @@ player.pause()
 
 
 
-if False:
+if noCommMode:
     #player.play()
     #sleep(1)
     #player.pause()
@@ -56,24 +59,23 @@ if False:
     sleep(10)
     player.stop()
 
-
-while True:
-    data = conn.recv(1024)
-    print('received: '+str(data))
-    if data=='term':
-        break
-    if '_' in data:
-        player.set_position(float(data.split('_')[1]))
-        cmd = data.split('_')[0]
-        arg = float(data.split('_')[1])
-        if cmd=='pause':
-            player.set_position(arg)
-            player.play()
-            sleep(10)
-            player.pause()
-        elif cmd=='play':
-            player.set_position(arg)
-            player.play()
+else:
+    while True:
+        data = conn.recv(1024)
+        print('received: '+str(data))
+        if data=='term':
+            break
+        if '_' in data:
+            cmd = data.split('_')[0]
+            arg = float(data.split('_')[1])
+            if cmd=='pause':
+                player.set_position(arg)
+                player.play()
+                sleep(10)
+                player.pause()
+            elif cmd=='play':
+                player.set_position(arg)
+                player.play()
 
     
 
