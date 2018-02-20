@@ -9,7 +9,7 @@ import socket
 import pdb
 
 
-noCommMode = True
+noCommMode = False
 
 if not noCommMode:
     HOST = ''
