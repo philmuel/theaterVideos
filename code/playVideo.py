@@ -75,7 +75,7 @@ else:
                 player.pause()
             elif cmd=='play':
                 player.set_position(arg)
-                player.play()
+#                player.play()
 
     
 
