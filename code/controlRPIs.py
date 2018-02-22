@@ -19,15 +19,39 @@ sleep(30)
 #sock.sendall('pause_3')
 #sleep(5)
 
-cmd = 'play_'+str(60*10)
+cmd = 'play_'+str(60*11)
+print('sending '+cmd)
+sock.sendall(cmd)
+sleep(15)
+
+cmd = 'play_'+str(60*0)
+print('sending '+cmd)
+sock.sendall(cmd)
+sleep(15)
+
+cmd = 'play_'+str(60*21)
+print('sending '+cmd)
+sock.sendall(cmd)
+sleep(15)
+
+cmd = 'play_'+str(60*0)
 print('sending '+cmd)
 sock.sendall(cmd)
 sleep(15)
 
 
-cmd = 'play_'+str(60*20)
+cmd = 'play_'+str(60*30)
 print('sending '+cmd)
 sock.sendall(cmd)
 sleep(15)
+
+
+
+cmd = 'play_'+str(60*36)
+print('sending '+cmd)
+sock.sendall(cmd)
+sleep(15)
+
+
 
 sock.sendall('term')
