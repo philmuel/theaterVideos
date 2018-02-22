@@ -34,10 +34,10 @@ player.stopEvent += lambda _: player_log.info("Stop")
 #player.set_video_pos(0, 0, 2000, 1800)
 sleep(10)
 #player.pause()
-player.set_position(0)
-player.play()
-sleep(10)
-player.pause()
+#player.set_position(0)
+#player.play()
+#sleep(10)
+#player.pause()
 
 
 
