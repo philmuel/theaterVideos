@@ -6,7 +6,7 @@ from time import sleep
 
 print('---- TV CONTROLLER VERSION 0.01 ----')
 
-raspi_ips = {0:'192.168.1.18'}
+raspi_ips = {0:'192.168.1.18',1:'192.168.1.17'}
 socks_for_raspis = {}
 for raspi_id, raspi_ip in raspi_ips.iteritems():
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
