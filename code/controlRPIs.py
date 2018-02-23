@@ -6,9 +6,12 @@ from time import sleep
 
 print('---- TV CONTROLLER VERSION 0.01 ----')
 
-sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-
-sock.connect(('192.168.1.71',55555))
+raspi_ips = {0:'192.168.1.18'}
+socks_for_raspis = {}
+for raspi_id, raspi_ip in raspi_ips.iteritems():
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sock.connect((raspi_ip,55555))
+    socks_for_raspis[raspi_id] = sock
 sleep(30)
 
 scenarioList = ['1.4','b','1.6','b','2','b','3']
@@ -29,7 +32,9 @@ while True:
     scenarioStartTime = scenarioStarts[chosenScenario]
     cmd = 'play_'+str(scenarioStartTime)
     print('sending '+cmd)
-    sock.sendall(cmd)
+    for raspi_sock in socks_for_raspis.values():
+#        sock.sendto(cmd.encode('utf-8'),(raspi_ip,55555))
+        raspi_sock.sendall(cmd)
     if chosenScenario=='2':
         response = raw_input('enter "p" to progress: ')
         # TODO: switch one raspi to noise
