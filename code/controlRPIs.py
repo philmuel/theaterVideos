@@ -3,6 +3,7 @@
 import socket
 import pdb
 from time import sleep
+import numpy as np
 
 print('---- TV CONTROLLER VERSION 0.01 ----')
 
@@ -32,11 +33,12 @@ while True:
         scenarioPointer += 1
     else:
         chosenScenario = response
-    scenarioStartTime = scenarioStarts[chosenScenario]
-    cmd = 'play_'+str(scenarioStartTime)
-    print('sending '+cmd)
-    for raspi_sock in socks_for_raspis.values():
-        raspi_sock.sendall(cmd)
+    if not chosenScenario=='3':
+        scenarioStartTime = scenarioStarts[chosenScenario]
+        cmd = 'play_'+str(scenarioStartTime)
+        print('sending '+cmd)
+        for raspi_sock in socks_for_raspis.values():
+            raspi_sock.sendall(cmd)
     if chosenScenario=='2':
         done = False
         for raspi_sock in socks_for_raspis.values():
@@ -58,17 +60,8 @@ while True:
         for raspi_id in raspi_ids:
             raspi_sock = socks_for_raspis[raspi_id]
             cmd = 'play_'+str(scenarioStarts['3'])
-            raspi_sock.sendall(cmd)
-            response = raw_input('enter something to progress, "b" for black screens: ')
-            if response=='b':
-                print('going to black screen')
-                done = True
-                break
-        if done: continue
-        # now add in additional videos:
-        for raspi_id in raspi_ids:
-            raspi_sock = socks_for_raspis[raspi_id]
-            cmd = 'play_'+str(scenarioStarts['3']+10*60)
+            print('at raspi_id '+str(raspi_id))
+            print('sending '+cmd)
             raspi_sock.sendall(cmd)
             if raspi_id==np.max(raspi_ids):
                 print('ATTENTION: next one is FAST!!!')
@@ -78,6 +71,21 @@ while True:
                 done = True
                 break
         if done: continue
+        # now add in additional videos:
+#        for raspi_id in raspi_ids:
+#            print('adding additional videos, raspi_id '+str(raspi_id))
+#            raspi_sock = socks_for_raspis[raspi_id]
+#            cmd = 'play_'+str(scenarioStarts['3']+10*60)
+#            raspi_sock.sendall(cmd)
+#            if raspi_id==np.max(raspi_ids):
+#                print('ATTENTION: next one is FAST!!!')
+#            response = raw_input('enter something to progress, "b" for black screens: ')
+#            if response=='b':
+#                print('going to black screen')
+#                done = True
+#                break
+#        if done: continue
+        print('now setting all to FAST!')
         for raspi_sock in socks_for_raspis.values():
             cmd = 'play_'+str(scenarioStarts['3']+20*60)
             raspi_sock.sendall(cmd)
