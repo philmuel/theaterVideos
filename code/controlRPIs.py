@@ -6,7 +6,8 @@ from time import sleep
 
 print('---- TV CONTROLLER VERSION 0.01 ----')
 
-raspi_ips = {0:'192.168.1.18',1:'192.168.1.17'}
+raspi_ips = {0:'192.168.178.36',1:'192.168.178.23',2:'192.168.178.42',
+             1:'192.168.178.39',1:'192.168.178.43'}
 socks_for_raspis = {}
 for raspi_id, raspi_ip in raspi_ips.iteritems():
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -15,7 +16,8 @@ for raspi_id, raspi_ip in raspi_ips.iteritems():
 sleep(30)
 
 scenarioList = ['1.4','b','1.6','b','2','b','3']
-scenarioStarts = {'1.4':60*10,'b':0,'1.6':60*20,'b':0,'2':60*30,'b':0,'3':60*50}
+#scenarioStarts = {'1.4':60*10,'b':0,'1.6':60*20,'b':0,'2':60*30,'b':0,'3':60*50}
+scenarioStarts = {'1.4':60*1,'b':0,'1.6':60*11,'b':0,'2':60*21,'b':0,'3':60*50}
 scenarioPointer = 0
 
 while True:

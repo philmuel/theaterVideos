@@ -4,17 +4,41 @@ import glob
 import pdb
 
 fps = 30.0
-raspi_ids = range(2)
+#raspi_ids = [0,1]#[2,3,4]#range(2)
+raspi_ids = [4]
 
 #dataDir = '/Users/philipp/Documents/theater/push_up/tv_project/'
-
-# TODO: add videos for scene 3
 
 dataDir = '/home/pmueller/pushup/'
 
 imgInDir = dataDir+'images_raw/'
 videoInDir = dataDir+'videos_raw/'
-outDir = dataDir+'videos_out/'
+#outDir = dataDir+'videos_out/'
+outDir = '/BS/body-language2/archive00/pushup/videos_out/'
+
+# TODO: add videos for scene 3
+
+scene3Dir = videoInDir+'scene3/'
+allVideoPaths = glob.glob(scene3Dir+'*.mp4')
+getPaths = lambda fnames: map(lambda fname: scene3Dir+fname,fnames)
+
+scene3Descr = {0:[{'speed':1,'videoPaths':getPaths(['keyboard_neu_cut.mp4']),'length':10},
+                  {'speed':1,'videoPaths':allVideoPaths,'length':10},
+                  {'speed':64,'videoPaths':allVideoPaths,'length':1}],
+               1:[{'speed':1,'videoPaths':getPaths(['Kinderarbeit_cut.mp4']),'length':10},
+                  {'speed':1,'videoPaths':allVideoPaths,'length':10},
+                  {'speed':64,'videoPaths':allVideoPaths,'length':1}],
+               2:[{'speed':1,'videoPaths':getPaths(['Crowd-Supermarked_cut.mp4']),'length':10},
+                  {'speed':1,'videoPaths':allVideoPaths,'length':10},
+                  {'speed':64,'videoPaths':allVideoPaths,'length':1}],
+               3:[{'speed':1,'videoPaths':getPaths(['Dr.Oetker2_cut.mp4']),'length':10},
+                  {'speed':1,'videoPaths':allVideoPaths,'length':10},
+                  {'speed':64,'videoPaths':allVideoPaths,'length':1}],
+               4:[{'speed':1,'videoPaths':getPaths(['Fische_cut.mp4']),'length':10},
+                  {'speed':1,'videoPaths':allVideoPaths,'length':10},
+                  {'speed':64,'videoPaths':allVideoPaths,'length':1}]}
+
+
 
 out_width = 656
 out_height = 512
@@ -84,70 +108,81 @@ for raspi_id in raspi_ids:
     out_path = outDir+'raspi'+str(raspi_id)+'.avi'
     out = cv2.VideoWriter(out_path,
                         fourcc,fps,(out_width,out_height*2))
-    out = addBlackPadding(out,1*60) # TODO: change to 120
+    print('add black padding, raspi '+str(raspi_id))
+    out = addBlackPadding(out,60*60) # TODO: change to 120
     videoWriters[raspi_id] = out
 
 
 
 
-## --------------------------------------------
-## STATIC IMGS FOR SCENE 1
-## --------------------------------------------
-#
-#for raspi_id in raspi_ids:
-#    # get video writer for raspi_id
-#    out = videoWriters[raspi_id]
-#    # first add image for scene 1.4
-#    imPath = imgInDir+'14_'+str(raspi_id)+'.jpg'
-#    out = addStaticImg(out,imPath)
-#    # then for scene 1.6
-#    imPath = imgInDir+'16_'+str(raspi_id)+'.jpg'
-#    out = addStaticImg(out,imPath)
-##    out = addBlackPadding(out)
-#    videoWriters[raspi_id] = out
-#
-#
-#
-## --------------------------------------------
-## VIDEOS FOR SCENE 2
-## --------------------------------------------
-#fade_in_time = 3 # seconds of linear fade in
-#for raspi_id in raspi_ids:
-#    print('writing videos for scene 2, raspi = '+str(raspi_id))
-#    out = videoWriters[raspi_id]
-##    videoPath = videoInDir+'s2_'+str(raspi_id)+'.mp4'
-#    videoPath = videoInDir+'s2_0.mp4'
-#    cap = cv2.VideoCapture(videoPath)
-#    # light leak video for 5 minutes, starting at different position for every raspi
-#    for i in range(int(raspi_id*30*fps)):
-#        ret,frame = cap.read()
-#    for i in range(int(5*60*fps)):
-#        ret,frame = cap.read()
-#        if i<fade_in_time*fps:
-#            fade_in_multiplier = float(i)/(fade_in_time*fps)
-#            frame = (frame*fade_in_multiplier).astype('uint8')
-#        frame = resizeImage(frame)
-#        out.write(frame)
-#    # then noise for 10 minutes
-#    for i in range(int(10*60*fps)):
-#        frame = np.random.randint(0,255,(120,180,1)).astype('uint8')
-#        frame = np.concatenate([frame]*3,axis=2)
-#        frame = resizeImage(frame)
-#        out.write(frame)
+# --------------------------------------------
+# STATIC IMGS FOR SCENE 1
+# --------------------------------------------
+
+for raspi_id in raspi_ids:
+    # get video writer for raspi_id
+    out = videoWriters[raspi_id]
+    # first add image for scene 1.4
+    imPath = imgInDir+'14_'+str(raspi_id)+'.jpg'
+    out = addStaticImg(out,imPath)
+    # then for scene 1.6
+    imPath = imgInDir+'16_'+str(raspi_id)+'.jpg'
+    out = addStaticImg(out,imPath)
+#    out = addBlackPadding(out)
+    videoWriters[raspi_id] = out
 
 
-def writeClips_scene3(out,videoPaths,speed):
-    videoPath = videoPaths[np.random.randint(len(videoPaths)-1)]
+
+# --------------------------------------------
+# VIDEOS FOR SCENE 2
+# --------------------------------------------
+fade_in_time = 3 # seconds of linear fade in
+for raspi_id in raspi_ids:
+    print('writing videos for scene 2, raspi = '+str(raspi_id))
+    out = videoWriters[raspi_id]
+#    videoPath = videoInDir+'s2_'+str(raspi_id)+'.mp4'
+    videoPath = videoInDir+'s2_0.mp4'
     cap = cv2.VideoCapture(videoPath)
+    # light leak video for 5 minutes, starting at different position for every raspi
+    for i in range(int(raspi_id*30*fps)):
+        ret,frame = cap.read()
+    for i in range(int(5*60*fps)):
+        ret,frame = cap.read()
+        if i<fade_in_time*fps:
+            fade_in_multiplier = float(i)/(fade_in_time*fps)
+            frame = (frame*fade_in_multiplier).astype('uint8')
+        frame = resizeImage(frame)
+        out.write(frame)
+    # then noise for 10 minutes
     for i in range(int(10*60*fps)):
+        frame = np.random.randint(0,255,(120,180,1)).astype('uint8')
+        frame = np.concatenate([frame]*3,axis=2)
+        frame = resizeImage(frame)
+        out.write(frame)
+
+
+def writeClips_scene3(out,videoPaths,speed,length=10):
+    if len(videoPaths)==1:
+        videoPath = videoPaths[0]
+    else:
+        videoPath = videoPaths[np.random.randint(len(videoPaths)-1)]
+    cap = cv2.VideoCapture(videoPath)
+    for i in range(int(length*60*fps)):
         for _ in range(speed):
             ret,frame = cap.read()
         if not ret:
             # have to start with next video
-            videoPath = videoPaths[np.random.randint(len(videoPaths)-1)]
+#            print('start new vid')
+            if len(videoPaths)==1:
+                videoPath = videoPaths[0]
+            else:
+                videoPath = videoPaths[np.random.randint(len(videoPaths)-1)]
             cap = cv2.VideoCapture(videoPath)
             ret,frame = cap.read()
-        frame = resizeImage(frame)
+#        else: print('old vid')
+        try:
+            frame = resizeImage(frame)
+        except: pdb.set_trace()
         out.write(frame)
 
 
@@ -155,15 +190,15 @@ def writeClips_scene3(out,videoPaths,speed):
 # --------------------------------------------
 # VIDEOS FOR SCENE 3
 # --------------------------------------------
-videoPaths = glob.glob(videoInDir+'scene3/*.mp4')
 for raspi_id in raspi_ids:
     print('writing videos for scene 3, raspi = '+str(raspi_id))
     out = videoWriters[raspi_id]
-    for speed in [1,2,3,4,6]:
-        print('speed = '+str(speed))
-        writeClips_scene3(out,videoPaths,speed)
-
-
+    for videoInfo in scene3Descr[raspi_id]:
+#        print('speed = '+str(speed))
+        speed = videoInfo['speed']
+        videoPaths = videoInfo['videoPaths']
+        length = videoInfo['length']
+        writeClips_scene3(out,videoPaths,speed,length)
 
 
 
