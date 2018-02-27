@@ -6,7 +6,9 @@ from time import sleep
 
 print('---- TV CONTROLLER VERSION 0.01 ----')
 
-raspi_ips = {0:'192.168.1.18',1:'192.168.1.17'}
+raspi_ips = {0:'169.254.207.187',1:'169.254.137.192',
+            2:'169.254.135.242',3:'169.254.150.32',4:'169.254.219.217'}
+raspi_ids = sorted(raspi_ips.keys())
 socks_for_raspis = {}
 for raspi_id, raspi_ip in raspi_ips.iteritems():
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -15,7 +17,8 @@ for raspi_id, raspi_ip in raspi_ips.iteritems():
 sleep(30)
 
 scenarioList = ['1.4','b','1.6','b','2','b','3']
-scenarioStarts = {'1.4':60*10,'b':0,'1.6':60*20,'b':0,'2':60*30,'b':0,'3':60*50}
+#scenarioStarts = {'1.4':60*120,'b':0,'1.6':60*130,'b':0,'2':60*140,'b':0,'3':60*50}
+scenarioStarts = {'1.4':60*60,'b':0,'1.6':60*70,'b':0,'2':60*80,'b':0,'3':60*95}
 scenarioPointer = 0
 
 while True:
@@ -33,14 +36,52 @@ while True:
     cmd = 'play_'+str(scenarioStartTime)
     print('sending '+cmd)
     for raspi_sock in socks_for_raspis.values():
-#        sock.sendto(cmd.encode('utf-8'),(raspi_ip,55555))
         raspi_sock.sendall(cmd)
     if chosenScenario=='2':
-        response = raw_input('enter "p" to progress: ')
-        # TODO: switch one raspi to noise
-    
-    
-    
+        done = False
+        for raspi_sock in socks_for_raspis.values():
+            # switch one raspi at a time to noise
+            while True:
+                response = raw_input('enter "p" to progress: ')
+                if response=='p':
+                    cmd = 'play_'+str(scenarioStarts['2']+5*60)
+                    raspi_sock.sendall(cmd)
+                    break
+                elif response=='b':
+                    print('going to black screen')
+                    done = True
+                    break
+            if done: break
+    if chosenScenario=='3':
+        # first switch on single looped videos
+        done = False
+        for raspi_id in raspi_ids:
+            raspi_sock = socks_for_raspis[raspi_id]
+            cmd = 'play_'+str(scenarioStarts['3'])
+            raspi_sock.sendall(cmd)
+            response = raw_input('enter something to progress, "b" for black screens: ')
+            if response=='b':
+                print('going to black screen')
+                done = True
+                break
+        if done: continue
+        # now add in additional videos:
+        for raspi_id in raspi_ids:
+            raspi_sock = socks_for_raspis[raspi_id]
+            cmd = 'play_'+str(scenarioStarts['3']+10*60)
+            raspi_sock.sendall(cmd)
+            if raspi_id==np.max(raspi_ids):
+                print('ATTENTION: next one is FAST!!!')
+            response = raw_input('enter something to progress, "b" for black screens: ')
+            if response=='b':
+                print('going to black screen')
+                done = True
+                break
+        if done: continue
+        for raspi_sock in socks_for_raspis.values():
+            cmd = 'play_'+str(scenarioStarts['3']+20*60)
+            raspi_sock.sendall(cmd)
+   
 
 
 
