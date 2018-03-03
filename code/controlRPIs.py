@@ -19,7 +19,7 @@ for raspi_id, raspi_ip in raspi_ips.iteritems():
     socks_for_raspis[raspi_id] = sock
 sleep(30)
 
-scenarioList = ['1.4','b','1.6','b','2','b','3']
+scenarioList = ['1.4','b','1.6','b','2','b','3','b']
 #scenarioStarts = {'1.4':60*120,'b':0,'1.6':60*130,'b':0,'2':60*140,'b':0,'3':60*50}
 scenarioStarts = {'1.4':60*60,'b':0,'1.6':60*75,'b':0,'2':60*90,'b':0,'3':60*105}
 scenarioPointer = 0
