@@ -33,20 +33,11 @@ player.stopEvent += lambda _: player_log.info("Stop")
 player.set_aspect_mode('stretch')
 player.set_video_pos(0, 0, 700, int(512*2.14))
 sleep(10)
-#player.pause()
-#player.set_position(0)
-#player.play()
-#sleep(10)
-#player.pause()
 
 
 
 if noCommMode:
-    #player.play()
-    #sleep(1)
-    #player.pause()
-    #player.pause()
-#    sleep(10)
+    # for debugging
     player.set_position(120*60)
 #    player.play()
 #    sleep(1)
@@ -75,21 +66,9 @@ else:
                 player.pause()
             elif cmd=='play':
                 player.set_position(arg)
-#                player.play()
 
     
 
 
 conn.close()
 player.quit()
-
-#sleep(2.5)
-
-#player.set_position(5)
-#player.pause()
-
-
-#player.play()
-
-#sleep(5)
-
