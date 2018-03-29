@@ -91,49 +91,6 @@ while True:
         for raspi_sock in socks_for_raspis.values():
             cmd = 'play_'+str(scenarioStarts['3']+20*60)
             raspi_sock.sendall(cmd)
-   
-
-
-
-#print('sending pause_0')
-#sock.sendall('pause_0')
-#sleep(15)
-
-#sock.sendall('pause_3')
-#sleep(5)
-#
-#cmd = 'play_'+str(60*11)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
-#
-#cmd = 'play_'+str(60*0)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
-#
-#cmd = 'play_'+str(60*21)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
-#
-#cmd = 'play_'+str(60*0)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
-#
-#
-#cmd = 'play_'+str(60*30)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
-#
-#
-#
-#cmd = 'play_'+str(60*36)
-#print('sending '+cmd)
-#sock.sendall(cmd)
-#sleep(15)
 
 
 
