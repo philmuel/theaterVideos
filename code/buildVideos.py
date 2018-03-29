@@ -8,15 +8,12 @@ fps = 30.0
 raspi_ids = [4]
 
 #dataDir = '/Users/philipp/Documents/theater/push_up/tv_project/'
-
 dataDir = '/home/pmueller/pushup/'
 
 imgInDir = dataDir+'images_raw/'
 videoInDir = dataDir+'videos_raw/'
 #outDir = dataDir+'videos_out/'
 outDir = '/BS/body-language2/archive00/pushup/videos_out/'
-
-# TODO: add videos for scene 3
 
 scene3Dir = videoInDir+'scene3/'
 allVideoPaths = glob.glob(scene3Dir+'*.mp4')
